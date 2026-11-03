@@ -1,0 +1,59 @@
+@parent-circle-size: 500px;
+@child-circle-size: 50px;
+@children-count: 8;
+@circle-rotate-angle: 360deg / @children-count;
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.flex-wrapper{
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+.parent-circle{
+    width: @parent-circle-size;
+    height: @parent-circle-size;
+    background-color: #F8BBD0;
+    border-radius: 50%;
+    position: relative;
+}
+.child-circle{
+    width: @child-circle-size;
+    height: @child-circle-size;
+    border-radius: inherit;
+    animation: circle-turning-on (@children-count * 1s) ease infinite forwards normal running;
+    position: absolute;
+    top: (@parent-circle-size / 2) - (@child-circle-size / 2);
+    right: 0;
+    transform-origin: (((@parent-circle-size / 2) - @child-circle-size) * -1) (@child-circle-size / 2);
+}
+
+.createCircleSelector(@N) when (@N <= @children-count){
+    .child-circle:nth-child(@{N}){
+        transform: rotate(@circle-rotate-angle * (@N - 1));
+        animation-delay: 1s * (@N - 1);
+    }
+    .createCircleSelector(@N + 1);
+}
+
+.createCircleSelector(1);
+
+@keyframes circle-turning-on{
+    0%{
+        background-color: #B71C1C;
+    }
+    12.5%{
+        background-color: #FDD835;
+    }
+    25%{
+        background-color: #B71C1C;
+    }
+    100%{
+        background-color: #B71C1C;
+    }
+}
